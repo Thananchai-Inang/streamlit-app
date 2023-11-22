@@ -39,55 +39,55 @@ st.title("House Rent Dataset - TGR GROUP 10")
 
 st.header("Dataset for the Exploration")
 #import csv
-df = pd.read_csv('House_Rent_Dataset.csv')
-st.dataframe(df)
+# df = pd.read_csv('House_Rent_Dataset.csv')
+# st.dataframe(df)
 
-################################################################################################################
+# ################################################################################################################
 
-#Sidebar for the query (Data Frame)
-st.sidebar.header("Select Filters Here:")
-st.header("Filtered")
-city = st.sidebar.selectbox("Select the City:",
-        options=df["City"].unique(),
-        index=0
-)
+# #Sidebar for the query (Data Frame)
+# st.sidebar.header("Select Filters Here:")
+# st.header("Filtered")
+# city = st.sidebar.selectbox("Select the City:",
+#         options=df["City"].unique(),
+#         index=0
+# )
 
-areaLocality = st.sidebar.multiselect("Select Area Locality:",
-        options=df.query("City == @city")["Area_Locality"].unique(),
-        default=df.query("City == @city")["Area_Locality"].unique()[0],
-)
+# areaLocality = st.sidebar.multiselect("Select Area Locality:",
+#         options=df.query("City == @city")["Area_Locality"].unique(),
+#         default=df.query("City == @city")["Area_Locality"].unique()[0],
+# )
 
-areaType = st.sidebar.selectbox("Select the Area Type:",
-        options=df["Area_Type"].unique(),
-        index=0
-)
+# areaType = st.sidebar.selectbox("Select the Area Type:",
+#         options=df["Area_Type"].unique(),
+#         index=0
+# )
 
-furnishing = st.sidebar.selectbox("Select the Furnishing Status:",
-        options=df["Furnishing_Status"].unique(),
-        index=0
-)
+# furnishing = st.sidebar.selectbox("Select the Furnishing Status:",
+#         options=df["Furnishing_Status"].unique(),
+#         index=0
+# )
 
-df_selection = df.query(
-        "Area_Locality == @areaLocality & Area_Type == @areaType & Furnishing_Status == @furnishing"
-)
-st.dataframe(df_selection) 
+# df_selection = df.query(
+#         "Area_Locality == @areaLocality & Area_Type == @areaType & Furnishing_Status == @furnishing"
+# )
+# st.dataframe(df_selection) 
 
-################################################################################################################
-# ---- MAINPAGE ----
-st.title(":bar_chart: House Rent Dashboard")
-st.markdown("##")
+# ################################################################################################################
+# # ---- MAINPAGE ----
+# st.title(":bar_chart: House Rent Dashboard")
+# st.markdown("##")
 
-average_rent = round(df_selection["Rent"].mean(),1)
-average_size = round(df_selection["Size"].mean(), 2)
-left_column, right_column = st.columns(2)
-with left_column:
-    st.subheader("Average Rentalt:")
-    st.subheader(f"US $ {average_rent:,}")
-with right_column:
-    st.subheader("Average Size Room:")
-    st.subheader(f"M {average_size}")
+# average_rent = round(df_selection["Rent"].mean(),1)
+# average_size = round(df_selection["Size"].mean(), 2)
+# left_column, right_column = st.columns(2)
+# with left_column:
+#     st.subheader("Average Rentalt:")
+#     st.subheader(f"US $ {average_rent:,}")
+# with right_column:
+#     st.subheader("Average Size Room:")
+#     st.subheader(f"M {average_size}")
 
-st.markdown("""---""")
+# st.markdown("""---""")
 
 ################################################################################################################
 
