@@ -7,7 +7,7 @@ app = FastAPI()
 
 ####router api part
 
-app.include_router(MqttRouter, tags=["MQTT"],prefix="/mqtt")
+# app.include_router(MqttRouter, tags=["MQTT"],prefix="/mqtt")
 app.include_router(MockRouter, tags=["Mock"],prefix="/mock")
 app.include_router(WaterRouter, tags=["Water"], prefix="/water")
 
