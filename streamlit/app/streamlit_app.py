@@ -7,40 +7,55 @@ import plotly.express as px
 
 
 #icon & detail
-st.set_page_config(page_title="House Rent Dashboard",
+st.set_page_config(page_title="Water data TGR_GROUP10",
                     page_icon=":bar_chart:",
                     layout="wide")
 ################################################################################################################
 
+# #pull data from collection.
+# @st.cache_data(ttl=600)
+# def get_data():
+#     db = client.streamlit
+#     docs = db.Mypet.find()
+#     #print(items)
+#     docs = list(docs) #make hashable for st.cache_data
+#     return docs
+
+# docs = get_data()
+
+# #Print results.
+# for doc in docs:
+#     st.write(f"{doc['name']} has a :{doc['weight']}")
 MONGO_DETAILS = "mongodb://TGR_GROUP10:LV741N@mongoDB:27017"
+
 @st.cache_resource
 def init_connection():
     return pymongo.MongoClient(MONGO_DETAILS)
 
 client = init_connection()
 
-#pull data from collection.
+# pull data from collection.
 @st.cache_data(ttl=600)
 def get_data():
-    db = client.streamlit
-    docs = db.Mypet.find()
-    #print(items)
-    docs = list(docs) #make hashable for st.cache_data
+    db = client.mockupdata
+    docs = db.waterdata.find()
+    # print(items)
+    docs = list(docs)  # make hashable for st.cache_data
     return docs
 
 docs = get_data()
 
-#Print results.
-for doc in docs:
-    st.write(f"{doc['name']} has a :{doc['weight']}")
+# Convert data to a DataFrame
+df = pd.DataFrame(docs)
 
+# Print results using DataFrame
+st.write(df)
 
-st.title("House Rent Dataset - TGR GROUP 10")
+################################################################################################################
 
-st.header("Dataset for the Exploration")
-#import csv
-# df = pd.read_csv('House_Rent_Dataset.csv')
-# st.dataframe(df)
+st.title("Water Data - TGR GROUP 10")
+
+st.header("Bar Chart")
 
 # ################################################################################################################
 
