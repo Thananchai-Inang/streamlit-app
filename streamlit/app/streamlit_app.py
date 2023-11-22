@@ -1,61 +1,113 @@
+import pymongo
+import math
 import streamlit as st
-import time
 import pandas as pd
 import numpy as np
+import plotly.express as px
 
 
-st.title("TEST")
-st.header("header")
-st.text("Welcome to my streamlit")
+#icon & detail
+st.set_page_config(page_title="House Rent Dashboard",
+                    page_icon=":bar_chart:",
+                    layout="wide")
+################################################################################################################
 
-#metric ใช้สรุปผลตัวเลข
-col1, col2, col3 = st.columns(3)
-col1.metric("Temperature", "70 °F", "1.2 °F")
-col2.metric("Wind", "9 mph", "-8%")
-col3.metric("Humidity", "86%", "4%")
+MONGO_DETAILS = "mongodb://TGR_GROUP10:LV741N@mongoDB:27017"
+@st.cache_resource
+def init_connection():
+    return pymongo.MongoClient(MONGO_DETAILS)
 
-#side bar ทำให้ web ดูฉลาดขึ้น
-# Using object notation
-add_selectbox = st.sidebar.selectbox(
-    "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone")
+client = init_connection()
+
+#pull data from collection.
+@st.cache_data(ttl=600)
+def get_data():
+    db = client.streamlit
+    docs = db.Mypet.find()
+    #print(items)
+    docs = list(docs) #make hashable for st.cache_data
+    return docs
+
+docs = get_data()
+
+#Print results.
+for doc in docs:
+    st.write(f"{doc['name']} has a :{doc['weight']}")
+
+
+st.title("House Rent Dataset - TGR GROUP 10")
+
+st.header("Dataset for the Exploration")
+#import csv
+df = pd.read_csv('House_Rent_Dataset.csv')
+st.dataframe(df)
+
+################################################################################################################
+
+#Sidebar for the query (Data Frame)
+st.sidebar.header("Select Filters Here:")
+st.header("Filtered")
+city = st.sidebar.selectbox("Select the City:",
+        options=df["City"].unique(),
+        index=0
 )
-# Using "with" notation
-with st.sidebar:
-    add_radio = st.radio(
-        "Choose a shipping method",
-        ("Standard (5-15 days)", "Express (2-5 days)")
-    )
 
-#tab
-tab1, tab2, tab3 = st.tabs(["Cat", "Dog", "Owl"])
+areaLocality = st.sidebar.multiselect("Select Area Locality:",
+        options=df.query("City == @city")["Area_Locality"].unique(),
+        default=df.query("City == @city")["Area_Locality"].unique()[0],
+)
 
-with tab1:
-   st.header("A cat")
-   st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+areaType = st.sidebar.selectbox("Select the Area Type:",
+        options=df["Area_Type"].unique(),
+        index=0
+)
 
-with tab2:
-   st.header("A dog")
-   st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
+furnishing = st.sidebar.selectbox("Select the Furnishing Status:",
+        options=df["Furnishing_Status"].unique(),
+        index=0
+)
 
-with tab3:
-   st.header("An owl")
-   st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
+df_selection = df.query(
+        "Area_Locality == @areaLocality & Area_Type == @areaType & Furnishing_Status == @furnishing"
+)
+st.dataframe(df_selection) 
 
-#progress abr
-progress_text = "Operation in progress. Please wait."
-my_bar = st.progress(0, text=progress_text)
+################################################################################################################
+# ---- MAINPAGE ----
+st.title(":bar_chart: House Rent Dashboard")
+st.markdown("##")
 
-for percent_complete in range(100):
-    time.sleep(0.01)
-    my_bar.progress(percent_complete + 1, text=progress_text)
-time.sleep(1)
-my_bar.empty()
+average_rent = round(df_selection["Rent"].mean(),1)
+average_size = round(df_selection["Size"].mean(), 2)
+left_column, right_column = st.columns(2)
+with left_column:
+    st.subheader("Average Rentalt:")
+    st.subheader(f"US $ {average_rent:,}")
+with right_column:
+    st.subheader("Average Size Room:")
+    st.subheader(f"M {average_size}")
 
-st.button("Rerun")
+st.markdown("""---""")
 
-df = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
+################################################################################################################
 
-st.map(df)
+# # BAR CHART Average rental
+# average_rental_line = df_selection.groupby(by=["Furnishing_Status"]).mean()[["Rent"]]
+# #st.dataframe(average_rental_line)
+# fig_average_rental = px.bar(
+#     average_rental_line,
+#     x="Rent",
+#     y=average_rental_line.index,
+#     orientation="h",
+#     title="<b>Average Rental Line</b>",
+#     color_discrete_sequence=["#0083B8"] * len(average_rental_line),
+#     template="plotly_white",
+# )
+# #update กรณีข้อฒูลมีการเปลี่ยน มันจะได้เปลี่ยนให้
+# fig_average_rental.update_layout(
+#     plot_bgcolor="rgba(0,0,0,0)",
+#     xaxis=(dict(showgrid=False))
+# )
+
+################################################################################################################
+
