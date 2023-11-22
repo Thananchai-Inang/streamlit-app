@@ -1,6 +1,7 @@
 import motor.motor_asyncio
 from bson.objectid import ObjectId
 
+# เราไม่คุยกันผ่าน ip แต่คุยกันผ่าน image: mongoDB
 MONGO_DETAILS = "mongodb://TGR_GROUP10:LV741N@mongoDB:27017"
 
 client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
