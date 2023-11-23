@@ -26,14 +26,14 @@ from server.models.water import (
 
 @fast_mqtt.on_connect()
 def connect(client, flags, rc, properties):
-    fast_mqtt.client.subscribe("/TGR_10") #subscribing mqtt topic
+    fast_mqtt.client.subscribe("TGR_GROUP/CMU_Maverick/#") #subscribing mqtt topic
     print("Connected: ", client, flags, rc, properties)
 
 @fast_mqtt.on_message()
 async def message(client, topic, payload, qos, properties):
     print("Received message: ",topic, payload.decode(), qos, properties)
 
-@fast_mqtt.subscribe("/TGR_10")
+@fast_mqtt.subscribe("TGR_GROUP/CMU_Maverick/#")
 async def message_to_topic(client, topic, payload, qos, properties):
     print("Received message to TGR_10 topic: ", topic, payload.decode(), qos, properties)
 
