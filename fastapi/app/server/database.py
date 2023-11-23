@@ -14,11 +14,8 @@ def water_helper(water) -> dict:
     return {
         "id": str(water["_id"]),
         "name": water["name"],
-        "year": water["year"],
-        "month": water["month"],
-        "date": water["date"],
-        "waterfront": water["waterfront"],
-        "waterback": water["waterback"],
+        "day": water["day"],
+        "waterlevel": water["waterlevel"],
         "waterdrain": water["waterdrain"],
     }
 

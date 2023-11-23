@@ -7,14 +7,10 @@ app = FastAPI()
 
 ####router api part
 
-# app.include_router(MqttRouter, tags=["MQTT"],prefix="/mqtt")
+app.include_router(MqttRouter, tags=["MQTT"],prefix="/mqtt")
 app.include_router(MockRouter, tags=["Mock"],prefix="/mock")
 app.include_router(WaterRouter, tags=["Water"], prefix="/water")
 
 @app.get("/", tags=["Root"])
 async def read_root():
     return {"message": "My REST API server!"}
-
-@app.get("/name/{name}", tags=["Name-Test"])
-async def read_name(name):
-    return {"YourNameIs": name}

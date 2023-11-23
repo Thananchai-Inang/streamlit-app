@@ -4,22 +4,16 @@ from pydantic import BaseModel, Field
 
 class WaterSchema(BaseModel):
     name: str = Field(...)
-    year: int = Field(..., gt=1990, lt=2030)
-    date: int = Field(..., gt=0, lt=32)
-    month: int = Field(..., gt=0, lt=13)
-    waterfront: float = Field(..., ge=0.0)
-    waterback: float = Field(..., ge=0.0)
+    day: int = Field(..., gt=0, lt=32)
+    waterlevel: float = Field(..., ge=0.0)
     waterdrain: float = Field(..., ge=0.0)
 
     class Config:
         schema_extra = {
             "example": {
                 "name": "M7",
-                "year": 2020,
-                "month":12,
-                "date":13,
-                "waterfront":121.1,
-                "waterback":111.3,
+                "daay":13,
+                "waterlevel":121.1,
                 "waterdrain":102.4,
             }
         }
@@ -27,22 +21,16 @@ class WaterSchema(BaseModel):
 
 class UpdateWaterModel(BaseModel):
     name: Optional[str]
-    year: Optional[int]
-    date: Optional[int]
-    month: Optional[int]
-    waterfront: Optional[float]
-    waterback: Optional[float]
+    day: Optional[int]
+    waterlevel: Optional[float]
     waterdrain: Optional[float]
 
     class Config:
         schema_extra = {
             "example": {
                 "name": "M7",
-                "year": 2020,
-                "month":12,
-                "date":13,
-                "waterfront":121.1,
-                "waterback":111.3,
+                "day":13,
+                "waterlevel":121.1,
                 "waterdrain":102.4,
             }
         }
