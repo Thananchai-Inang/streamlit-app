@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import matplotlib.pyplot as plt
+import altair as alt
 
 
 #icon & detail
@@ -37,41 +37,37 @@ def get_data():
 
 docs = get_data()
 
-st.header("Raw Data")
-
 # Convert data to a DataFrame
 df = pd.DataFrame(docs)
 
-# Print results using DataFrame
-st.write(df)
 
 ################################################################################################################
-#plot for cleaning
 
-st.header("Let's Explore and Plot the Raw Data!!")
+# st.header("Raw Data")
 
-# Filter columns excluding '_id'
-columns_to_plot = [col for col in df.columns if col != '_id']
+# Boolean variable to track the visibility of content
+show_content = st.checkbox('Show/Hide raw data')
 
-# Choose the column to plot
-column_to_plot = st.selectbox("Select a column to plot:", columns_to_plot)
+# Display content based on the visibility state
+if show_content:
+    st.write(df)
 
-# Bar chart with a title
-st.bar_chart(df[[column_to_plot]].rename(columns={column_to_plot: 'Selected Column'}))
 
 #################################################################################################################
+st.header('Plot the data over days')
 
-# Create a scatter plot using Matplotlib
-fig, ax = plt.subplots()
-ax.scatter(df['waterlevel'], df['day'])
+# Selectbox for choosing data type
+water_list = ['waterlevel', 'waterdrain']
+selected_data = st.selectbox('Select a data to plot:', water_list)
 
-# Set the x-axis range as per your requirement
-ax.set_xlim(80, 100)
+# Slider for choosing day range
+day_start, day_end = st.slider('Select a day range:', min_value=1, max_value=100, value=(1, 100))
 
-# Display the plot using Streamlit
-st.pyplot(fig)
+# Filter DataFrame based on selected day range
+filtered_df = df[(df['day'] >= day_start) & (df['day'] <= day_end)]
 
-# st.scatter_chart(df["waterlevel"])
+# Line plot
+st.line_chart(filtered_df.set_index('day')[selected_data])
 
 #################################################################################################################
 
@@ -92,95 +88,3 @@ st.pyplot(fig)
 
 
 ################################################################################################################
-chart_data = df  # Assuming df is your DataFrame
-st.title('Latest Water Data')
-
-# Display metrics
-col1, col2 = st.columns(2)
-
-# Metrics for WaterDataFront
-col1.metric("WaterDataFront", df['WaterDataFront'].iloc[-1], delta=df['WaterDataFront'].diff().iloc[-1])
-
-# Metrics for WaterDataBack
-col2.metric("WaterDataBack", df['WaterDataBack'].iloc[-1], delta=df['WaterDataBack'].diff().iloc[-1])
-
-# Additional metrics for WaterDrainRate
-st.metric("WaterDrainRate", df['WaterDrainRate'].iloc[-1], delta=df['WaterDrainRate'].diff().iloc[-1])
-
-
-################################################################################################################
-
-scatter_data = df  # Assuming df is your DataFrame
-
-
-st.title('Average Water Data Front and Back Metrics')
-# Display metrics for the scatter plot
-col1, col2 = st.columns(2)
-
-
-# Metrics for WaterDataFront
-col1.metric("Avg WaterDataFront", scatter_data['WaterDataFront'].mean(), delta=scatter_data['WaterDataFront'].diff().mean())
-
-# Metrics for WaterDataBack
-col2.metric("Avg WaterDataBack", scatter_data['WaterDataBack'].mean(), delta=scatter_data['WaterDataBack'].diff().mean())
-
-
-
-
-
-
-
-
-
-
-#correlation
-# Group by 'Year' and calculate the average of 'WaterDataBack'
-average_water_data_back = df.groupby('Year')['WaterDataBack'].mean().reset_index()
-
-# Streamlit app
-st.title('Year and Average WaterDataBack Correlation')
-
-# Line plot using Plotly Express
-fig = px.line(average_water_data_back, x='Year', y='WaterDataBack', labels={'WaterDataBack': 'Average Water Data Back'})
-fig.update_layout(title='Correlation between Year and Average WaterDataBack',
-                  xaxis_title='Year',
-                  yaxis_title='Average Water Data Back')
-
-# Display the plot in Streamlit app
-st.plotly_chart(fig)
-
-
-# Group by 'Month' and calculate the average of 'WaterDataBack'
-average_water_data_back_monthly = df.groupby('Month')['WaterDataBack'].mean().reset_index()
-
-# Streamlit app
-st.title('Month and Average WaterDataBack Correlation')
-
-# Line plot using Plotly Express
-fig_monthly = px.line(average_water_data_back_monthly, x='Month', y='WaterDataBack', labels={'WaterDataBack': 'Average Water Data Back'})
-fig_monthly.update_layout(title='Correlation between Month and Average WaterDataBack',
-                          xaxis_title='Month',
-                          yaxis_title='Average Water Data Back')
-
-# Display the plot in Streamlit app
-st.plotly_chart(fig_monthly)
-
-
-
-
-
-
-#correlations
-# Streamlit app
-st.title('Correlation between Water Data Columns')
-
-# Select the relevant columns for correlation
-selected_columns = ['WaterDataFront', 'WaterDataBack', 'WaterDrainRate']
-
-# Scatter matrix using Plotly Express
-fig_scatter_matrix = px.scatter_matrix(df[selected_columns], dimensions=selected_columns,
-                                      labels={col: col for col in selected_columns},
-                                      title='Correlation Between Water Data Columns')
-
-# Display the plot in Streamlit app
-st.plotly_chart(fig_scatter_matrix)
