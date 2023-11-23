@@ -56,9 +56,11 @@ if show_content:
 #################################################################################################################
 st.header('Plot the data over days')
 
-# Selectbox for choosing data type
-water_list = ['waterlevel', 'waterdrain']
-selected_data = st.selectbox('Select a data to plot:', water_list)
+# Using object notation
+selected_data = st.sidebar.selectbox(
+    "Select data to plot",
+    ("waterlevel", "waterdrain")
+)
 
 # Line plot
 st.line_chart(df[selected_data])
