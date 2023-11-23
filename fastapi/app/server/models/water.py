@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 class WaterSchema(BaseModel):
     name: str = Field(...)
-    day: int = Field(..., gt=0, lt=32)
+    day: int = Field(..., gt=0)
     waterlevel: float = Field(..., ge=0.0)
     waterdrain: float = Field(..., ge=0.0)
 
