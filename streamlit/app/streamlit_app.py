@@ -14,20 +14,6 @@ st.set_page_config(page_title="Water data TGR_GROUP10",
 st.title("Water Data - TGR GROUP 10")
 ################################################################################################################
 
-# #pull data from collection.
-# @st.cache_data(ttl=600)
-# def get_data():
-#     db = client.streamlit
-#     docs = db.Mypet.find()
-#     #print(items)
-#     docs = list(docs) #make hashable for st.cache_data
-#     return docs
-
-# docs = get_data()
-
-# #Print results.
-# for doc in docs:
-#     st.write(f"{doc['name']} has a :{doc['weight']}")
 MONGO_DETAILS = "mongodb://TGR_GROUP10:LV741N@mongoDB:27017"
 
 @st.cache_resource
@@ -37,7 +23,7 @@ def init_connection():
 client = init_connection()
 
 # pull data from collection.
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=0)
 def get_data():
     db = client.mockupdata
     docs = db.waterdata.find()
