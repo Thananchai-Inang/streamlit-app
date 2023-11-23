@@ -25,8 +25,8 @@ mongo_db = MongoDB()
 data_list = list()
 for date in range(1, 100, 1):
     data_list.append({
-        'Name': 'genmockdata',
-        'Date': date,
+        'name': 'genmockdata',
+        'date': date,
         'waterlevel': random.uniform(100, 120),  # Use random.uniform for float values
         'waterdrain': random.uniform(90, 180)  # Use random.uniform for float values
     })
