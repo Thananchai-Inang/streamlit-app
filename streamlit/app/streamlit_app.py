@@ -63,7 +63,7 @@ st.bar_chart(df[[column_to_plot]].rename(columns={column_to_plot: 'Selected Colu
 
 # Create a scatter plot using Matplotlib
 fig, ax = plt.subplots()
-ax.scatter(df['x'], df['y'])
+ax.scatter(df['waterlevel'], df['day'])
 
 # Set the x-axis range as per your requirement
 ax.set_xlim(80, 100)

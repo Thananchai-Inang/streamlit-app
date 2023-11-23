@@ -4,3 +4,9 @@ streamlit
 pymongo
 plotly-express
 scipy
+matplotlib
+seaborn
+bokeh
+folium
+holoviews
+dash
