@@ -27,10 +27,13 @@ client = init_connection()
 @st.cache_data(ttl=0)
 def get_data():
     db = client.water_data
+
     # # water real
-    # docs = db.waters_collection.find()
+    docs = db.waters_collection.find()
+
     #water test - genmock
-    docs =db.genmockdata.find()
+    # docs = db.genmockdata.find()
+
     # print(items)
     docs = list(docs)  # make hashable for st.cache_data
     return docs
@@ -66,6 +69,18 @@ selected_data = st.sidebar.selectbox(
 st.line_chart(df[selected_data])
 
 #################################################################################################################
+
+
+# Sort DataFrame by date in descending order
+df = df.sort_values(by='day', ascending=False)
+
+# Get the latest row
+latest_row = df.iloc[0]
+
+# Display the latest values in a Streamlit metric
+st.sidebar.metric(label='Latest Water Level', value=latest_row['waterlevel'], delta=None)
+st.sidebar.metric(label='Latest Water Drain', value=latest_row['waterdrain'], delta=None)
+
 
 
 #################################################################################################################
