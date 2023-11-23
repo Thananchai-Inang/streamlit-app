@@ -60,14 +60,8 @@ st.header('Plot the data over days')
 water_list = ['waterlevel', 'waterdrain']
 selected_data = st.selectbox('Select a data to plot:', water_list)
 
-# Slider for choosing day range
-day_start, day_end = st.slider('Select a day range:', min_value=1, max_value=100, value=(1, 100))
-
-# Filter DataFrame based on selected day range
-filtered_df = df[(df['day'] >= day_start) & (df['day'] <= day_end)]
-
 # Line plot
-st.line_chart(filtered_df.set_index('day')[selected_data])
+st.line_chart(df[selected_data])
 
 #################################################################################################################
 
