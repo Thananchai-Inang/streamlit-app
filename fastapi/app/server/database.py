@@ -8,6 +8,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 
 database = client.water_data
 
+#change from waters_collection to genmockdata
 water_collection = database.get_collection("waters_collection")
 
 def water_helper(water) -> dict:
