@@ -12,7 +12,7 @@ class WaterSchema(BaseModel):
         schema_extra = {
             "example": {
                 "name": "M7",
-                "daay":13,
+                "day":13,
                 "waterlevel":121.1,
                 "waterdrain":102.4,
             }

@@ -14,7 +14,7 @@ water_collection = database.get_collection("waters_collection")
 def water_helper(water) -> dict:
     return {
         "id": str(water["_id"]),
-        "name": water["name"],
+        # "name": water["name"],
         "day": water["day"],
         "waterlevel": water["waterlevel"],
         "waterdrain": water["waterdrain"],

@@ -13,6 +13,7 @@ st.set_page_config(page_title="Water data TGR_GROUP10",
                     layout="wide")
 
 st.title("Water Data - TGR GROUP 10")
+
 ################################################################################################################
 
 MONGO_DETAILS = "mongodb://TGR_GROUP10:LV741N@mongoDB:27017"
@@ -43,7 +44,6 @@ docs = get_data()
 # Convert data to a DataFrame
 df = pd.DataFrame(docs)
 
-
 ################################################################################################################
 
 # st.header("Raw Data")
@@ -55,8 +55,8 @@ show_content = st.checkbox('Show/Hide raw data')
 if show_content:
     st.write(df)
 
-
 #################################################################################################################
+
 st.header('Plot the data over days')
 
 # Using object notation
@@ -70,7 +70,6 @@ st.line_chart(df[selected_data])
 
 #################################################################################################################
 
-
 # Sort DataFrame by date in descending order
 df = df.sort_values(by='day', ascending=False)
 
@@ -80,8 +79,6 @@ latest_row = df.iloc[0]
 # Display the latest values in a Streamlit metric
 st.sidebar.metric(label='Latest Water Level', value=latest_row['waterlevel'], delta=None)
 st.sidebar.metric(label='Latest Water Drain', value=latest_row['waterdrain'], delta=None)
-
-
 
 #################################################################################################################
 
